@@ -1,0 +1,176 @@
+/* #region guides */
+._main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+._guide {
+    background-color: #FFFDF6;
+    width: 100%;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+@media (min-width:768px) {
+    ._main {
+
+        width: 60%;
+    }
+}
+
+/* #endregion guides */
+
+/* #region news */
+._news {
+    background-color: #FFFDF6;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+}
+
+._news-title {
+    font-size: 24px;
+    line-height: 35px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.carousel-inner span,
+.carousel-inner p,
+.carousel-inner h5 {
+    color: #FFF;
+    text-shadow: 0.1em 0.1em 0.2em black;
+}
+
+._news img {
+    object-fit: contain;
+    height: 225px;
+}
+
+@media (min-width:768px) {
+    ._news {
+        border-radius: 5px;
+    }
+
+    ._news img {
+        height: 600px;
+    }
+}
+
+/* #endregion news */
+/* #region side */
+._side {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+@media (min-width:768px) {
+    ._side {
+        width: 40%;
+    }
+
+}
+
+/* #endregion side */
+
+/* #region newgames */
+._newgames {
+    background-color: #FFFDF6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+._newgames-title {
+    font-size: 24px;
+    line-height: 35px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+._gamecards {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: scroll;
+    padding-left: 10px;
+}
+
+._gamecard {
+    height: 250px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+}
+
+._gamecard :hover {
+    opacity: 75%;
+}
+
+._gamecard span {
+    font-family: Noto Sans TC;
+    font-size: 16px;
+    line-height: 23px;
+    text-align: center;
+    color: #000;
+}
+
+._gamecard img {
+    height: 200px;
+    object-fit: contain;
+}
+
+/* #endregion newgames */
+/* #region classic */
+._classic {
+    background-color: #FFFDF6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+._classic-title {
+    font-size: 24px;
+    line-height: 35px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* #endregion classic */
+/* #region trynow */
+._trynow {
+    background-color: #FFFDF6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+._trynow-title {
+    font-size: 24px;
+    line-height: 35px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* #endregion trynow */
