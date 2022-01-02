@@ -87,7 +87,7 @@
 }
 
 ._gamecard {
-    height: 250px;
+    height: 170px;
     width: 300px;
     display: flex;
     flex-direction: column;
@@ -108,14 +108,14 @@
 }
 
 ._gamecard img {
-    height: 200px;
+    height: 140px;
     object-fit: contain;
 }
 
 ._detail-link {
     /* padding: 20px; */
     width: 33%;
-    margin: 20px 0;
+    margin-bottom: 20px;
     height: 40px;
     font-size: 18px;
     line-height: 40px;
