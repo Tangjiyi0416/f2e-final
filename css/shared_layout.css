@@ -33,6 +33,7 @@ body {
     background-color: var(--bg-color);
 }
 
+
 /*#region navbar */
 ._navbar-bg {
     background: var(--bg-color) !important;

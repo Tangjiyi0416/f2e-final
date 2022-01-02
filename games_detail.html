@@ -17,10 +17,10 @@
     </script>
     <script type="module" src="js/firebase.js"></script>
     <script src="js/shared_layout.js"></script>
-    <link rel="stylesheet" href="css/news_detail.css">
+    <link rel="stylesheet" href="css/games_detail.css">
     <script>
         const params = new URLSearchParams(window.location.search);
-        const news = params.get("news");
+        const game = params.get("game");
         // alert((livers.find(e => e.name == liver)).desc);
         $(function () {
             // let index = livers.findIndex(e => e.name == liver);
@@ -32,7 +32,7 @@
             //     `liver_detail.html?liver=${livers[index<livers.length-1?index+1:livers.length-1].name}`);
             // $("#yt-link").attr("href", `${livers[index].yt}`);
             // $("#tw-link").attr("href", `${livers[index].tw}`);
-            console.log(news);
+            console.log(game);
         });
     </script>
 </head>
@@ -40,29 +40,27 @@
 <body>
     <div class="nav-ahr"></div>
 
-    <main class="container-fluid d-flex flex-column align-content-center _news">
+    <main class="container-fluid d-flex flex-column align-content-center _games">
         <div class="_breadcrumb" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="news.html">最新消息</a></li>
-                <li class="breadcrumb-item active" aria-current="page">消息詳情</li>
+                <li class="breadcrumb-item"><a href="games.html">桌遊一覽</a></li>
+                <li class="breadcrumb-item active" aria-current="page">桌遊介紹</li>
             </ol>
         </div>
-        <span class="_news-detail-title">消息詳情</span>
+        <span class="_news-detail-title">桌遊介紹</span>
 
         <div class="card mb-3 pt-2 _card">
             <div class=" row g-0 pb-2">
-                <div class="col-md-8 d-flex justify-content-center">
-                    <img src="kks_box_front_520px.png" class="img-fluid rounded-start" alt="...">
+                <div class="col-md-4 d-flex justify-content-center">
+                    <img src="avalon 1.png" class="img-fluid rounded-start" alt="...">
                 </div>
-                <div class="col-md-4">
-                    <div class="card-body">
-                        <h5 class="card-title _card-title">卡卡頌20周年</h5>
-                        <p class="card-text _card-text">卡卡頌20周年限定典藏發售中<br>另附台灣地圖擴充</p>
+                <div class="col-md-8 d-flex flex-column">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title _card-title">阿瓦隆</h5>
+                        <p class="card-text _card-text">經典的陣營類遊戲，在雙方的爾虞我詐下遠征究竟能否成功呢</p>
                     </div>
+                    <a class="_detail-link" href="#">試玩看看</a>
                 </div>
-            </div>
-            <div class="card-footer">
-                <p class="card-text text-center"><small class="text-muted">2021/12/1</small></p>
             </div>
         </div>
 

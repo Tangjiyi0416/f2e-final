@@ -95,7 +95,7 @@
     text-decoration: none;
 }
 
-._gamecard :hover {
+._gamecard:hover {
     opacity: 75%;
 }
 
@@ -127,6 +127,11 @@
     text-decoration: none;
 }
 
+._detail-link:hover {
+    color: #EFE7C9;
+    background: #000;
+}
+
 /* #endregion side */
 
 /* #region newgames */
@@ -146,13 +151,6 @@
     font-weight: bold;
     text-align: center;
     margin-top: 10px;
-}
-
-
-
-._detail-link:hover {
-    color: #EFE7C9;
-    background: #000;
 }
 
 /* #endregion newgames */
