@@ -1,0 +1,56 @@
+._trynow {
+    background: #FFFDF6;
+    padding-bottom: 10px;
+}
+
+._news-detail-title {
+    font-family: Noto Sans TC;
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 52px;
+    text-align: center;
+
+}
+
+@media (max-width:768px) {
+
+    ._card>div>div>img {
+        max-width: 320px;
+    }
+}
+
+._card-title {
+    font-family: Noto Sans TC;
+    font-size: 24px;
+    line-height: 35px;
+    text-align: center;
+
+}
+
+._card-text {
+    font-family: Noto Sans TC;
+    font-size: 18px;
+    line-height: 26px;
+    text-align: left;
+
+}
+
+._detail-link {
+    /* padding: 20px; */
+    width: 33%;
+    margin-bottom: 20px;
+    height: 40px;
+    font-size: 18px;
+    line-height: 40px;
+    text-align: center;
+    border: 1px #000 solid;
+    border-radius: 20px;
+    align-self: center;
+    color: #000;
+    text-decoration: none;
+}
+
+._detail-link:hover {
+    color: #EFE7C9;
+    background: #000;
+}

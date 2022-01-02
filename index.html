@@ -16,9 +16,95 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
   </script>
-  <script type="module" src="js/firebase.js"></script>
-  <script src="js/shared_layout.js"></script>
 
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+  <script src="js/shared_layout.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBeOEuEKJ6RIxlYjUyAyImN6dp63zvAE4k",
+      authDomain: "f2e-final-16079.firebaseapp.com",
+      projectId: "f2e-final-16079",
+      storageBucket: "f2e-final-16079.appspot.com",
+      messagingSenderId: "717088954690",
+      appId: "1:717088954690:web:7a3f336707928485cf10db",
+      measurementId: "G-QY4TYEPS8K"
+    }
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    let db = firebase.firestore();
+    let storage = firebase.storage();
+    let newsRef = db.collection("news-content");
+    let newscount = 0;
+    $(function () {
+      newsRef.get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          console.log(data);
+          $(".carousel-inner").append(
+            `
+            <div class="carousel-item ${newscount==0?'active':''} ">
+              <a href="news_detail.html?news=${doc.id}">
+                <div class="_spinner">
+                  <div class="spinner-border text-dark" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+                <img src="kks_box_front_520px.png" class="d-block w-100 d-none" id="img-${doc.id}" alt="">
+                <div class="carousel-caption d-none d-md-block">
+                  <h5>${data.title}</h5>
+                  <p>${data.description}</p>
+                </div>
+              </a>
+            </div>
+            `
+          );
+          newscount++;
+          var gsReference = storage.ref(data.image);
+          gsReference.getDownloadURL()
+            .then((url) => {
+              // `url` is the download URL for 'images/stars.jpg'
+
+              // This can be downloaded directly:
+              var xhr = new XMLHttpRequest();
+              xhr.responseType = 'blob';
+              xhr.onload = (event) => {
+                var blob = xhr.response;
+              };
+              xhr.open('GET', url);
+              xhr.send();
+
+              // Or inserted into an <img> element
+              $(`#img-${doc.id}`).attr("src", url).removeClass("d-none").siblings("._spinner").addClass(
+                "d-none");
+            })
+            .catch((error) => {
+              // Handle any errors
+            });
+        });
+      }).catch((e) => {
+        console.log(e);
+        $(".carousel-inner").html(`
+            <div class="carousel-item active">
+              <a href="#">
+                <div class="_spinner">
+                  <div class="spinner-border text-dark" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+                <div class="carousel-caption d-none d-md-block">
+                  <h5>Website is dead</h5>
+                  <p>Website is dead.</p>
+                </div>
+              </a>
+            </div>
+            `);
+      });
+    });
+  </script>
 </head>
 
 <body class="d-flex flex-column justify-content-between h-100">
@@ -36,56 +122,20 @@
         </div>
         <div class="_news w-100">
           <span class="_news-title">最新消息</span>
-          <div id="carouselExampleCaptions" class="carousel slide carousel-dark" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
-                aria-current="true" aria-label="Slide 1"></button>
-              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
-                aria-label="Slide 2"></button>
-              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
-                aria-label="Slide 3"></button>
-            </div>
+          <div id="carousel1" class="carousel slide carousel-dark" data-bs-ride="carousel">
             <div class="carousel-inner">
-              <div class=" carousel-item active">
-                <a href="#">
-                  <img src="kks_box_front_520px.png" class="d-block w-100 " alt="">
-                  <div class="carousel-caption d-none d-md-block">
-                    <h5>First slide label</h5>
-                    <p>Some representative placeholder content for the first slide.</p>
-                  </div>
-                </a>
-              </div>
-              <div class="carousel-item">
-                <a href="#">
-                  <img src="BaHotH 1.png" class="d-block w-100" alt="">
-                  <div class="carousel-caption d-none d-md-block">
-                    <h5>Second slide label</h5>
-                    <p>Some representative placeholder content for the second slide.</p>
-                  </div>
-                </a>
-              </div>
-              <div class="carousel-item">
-                <a href="#">
-                  <img src="kks_box_front_520px.png" class="d-block w-100" alt="">
-                  <div class="carousel-caption d-none d-md-block">
-                    <h5>Third slide label</h5>
-                    <p>Some representative placeholder content for the third slide.</p>
-                  </div>
-              </div>
-              </a>
+
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
-              data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel1" data-bs-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
-              data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel1" data-bs-slide="next">
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
             </button>
             <script>
-              let cl = new bootstrap.Carousel(document.querySelector('#carouselExampleCaptions'), {
+              let cl = new bootstrap.Carousel(document.querySelector('#carousel1'), {
                 interval: 5000,
                 wrap: true
               });

@@ -40,11 +40,26 @@
     margin-top: 10px;
 }
 
-.carousel-inner span,
-.carousel-inner p,
-.carousel-inner h5 {
-    color: #FFF;
-    text-shadow: 0.1em 0.1em 0.2em black;
+.carousel-caption {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: #FFF !important;
+    font-family: Noto Sans TC;
+    font-size: 1.5rem;
+    background: linear-gradient(0deg, black, #00000050);
+    text-shadow: black 0.2rem 0.2rem;
+}
+
+.carousel-caption h5 {
+    font-size: 2rem;
+}
+
+._spinner {
+    min-height: 225px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 ._news img {
@@ -59,6 +74,10 @@
 
     ._news img {
         height: 600px;
+    }
+
+    ._spinner {
+        min-height: 600px;
     }
 }
 
@@ -114,6 +133,7 @@
 
 ._detail-link {
     /* padding: 20px; */
+    font-family: Noto Sans TC;
     width: 33%;
     margin-bottom: 20px;
     height: 40px;
@@ -146,6 +166,7 @@
 }
 
 ._newgames-title {
+    font-family: Noto Sans TC;
     font-size: 24px;
     line-height: 35px;
     font-weight: bold;
@@ -166,6 +187,7 @@
 }
 
 ._classic-title {
+    font-family: Noto Sans TC;
     font-size: 24px;
     line-height: 35px;
     font-weight: bold;
@@ -186,6 +208,7 @@
 }
 
 ._trynow-title {
+    font-family: Noto Sans TC;
     font-size: 24px;
     line-height: 35px;
     font-weight: bold;

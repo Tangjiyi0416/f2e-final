@@ -52,7 +52,7 @@ body {
 }
 
 ._navbar-brand {
-    font-family: 'Noto Sans TC';
+    font-family: Noto Sans TC;
     font-weight: bold;
     font-size: 28px;
     line-height: 41px;
@@ -71,6 +71,7 @@ body {
 
 ._navbar-collapse {
     background: var(--secondary-bg-color);
+    font-family: Noto Sans TC;
     font-size: 18px;
     line-height: 26px;
     text-align: left;
@@ -145,6 +146,7 @@ footer {
 }
 
 ._footer-brand {
+    font-family: Noto Sans TC;
     font-size: 28px;
     line-height: 41px;
     text-align: center;
@@ -152,6 +154,7 @@ footer {
 }
 
 ._footer-content {
+    font-family: Noto Sans TC;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -181,6 +184,7 @@ footer {
 }
 
 ._footer-cr {
+    font-family: Noto Sans TC;
     font-size: 12px;
     line-height: 17px;
     text-align: center;
@@ -205,6 +209,7 @@ footer {
 
 ._footer-medialink,
 ._footer-link {
+    font-family: Noto Sans TC;
     text-decoration: none;
     font-weight: 100;
     color: #FFF;
