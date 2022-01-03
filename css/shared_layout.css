@@ -29,10 +29,22 @@ html {
 }
 
 body {
-
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     background-color: var(--bg-color);
 }
 
+main {
+    flex-grow: 1;
+}
+
+._spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
 
 /*#region navbar */
 ._navbar-bg {

@@ -31,29 +31,33 @@
       messagingSenderId: "717088954690",
       appId: "1:717088954690:web:7a3f336707928485cf10db",
       measurementId: "G-QY4TYEPS8K"
-    }
+    };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 
     let db = firebase.firestore();
     let storage = firebase.storage();
     let newsRef = db.collection("news-content");
+    let gamesRef = db.collection("boardgame-content");
     let newscount = 0;
     $(function () {
+      const $carouselInner = $(".carousel-inner");
+      //get news
       newsRef.get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           console.log(data);
-          $(".carousel-inner").append(
+          //place news
+          $carouselInner.append(
             `
-            <div class="carousel-item ${newscount==0?'active':''} ">
+            <div class="carousel-item h-100 ${newscount==0?'active':''} ">
               <a href="news_detail.html?news=${doc.id}">
                 <div class="_spinner">
                   <div class="spinner-border text-dark" role="status">
                     <span class="visually-hidden">Loading...</span>
                   </div>
                 </div>
-                <img src="kks_box_front_520px.png" class="d-block w-100 d-none" id="img-${doc.id}" alt="">
+                <img class="d-block w-100 d-none" id="img-news-${doc.id}" alt="">
                 <div class="carousel-caption d-none d-md-block">
                   <h5>${data.title}</h5>
                   <p>${data.description}</p>
@@ -67,28 +71,37 @@
           gsReference.getDownloadURL()
             .then((url) => {
               // `url` is the download URL for 'images/stars.jpg'
-
-              // This can be downloaded directly:
-              var xhr = new XMLHttpRequest();
-              xhr.responseType = 'blob';
-              xhr.onload = (event) => {
-                var blob = xhr.response;
-              };
-              xhr.open('GET', url);
-              xhr.send();
-
               // Or inserted into an <img> element
-              $(`#img-${doc.id}`).attr("src", url).removeClass("d-none").siblings("._spinner").addClass(
-                "d-none");
+              $(`#img-news-${doc.id}`).attr("src", url).removeClass("d-none").siblings("._spinner")
+                .addClass(
+                  "d-none");
             })
             .catch((error) => {
               // Handle any errors
             });
         });
+        if (newscount == 0) {
+          $carouselInner.html(`
+            <div class="carousel-item h-100 active">
+              <a href="#">
+                <div class="_spinner">
+                  <div class="spinner-border text-dark" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+                <div class="carousel-caption d-none d-md-block">
+                  <h5>Website is dead</h5>
+                  <p>Website is dead.</p>
+                </div>
+              </a>
+            </div>
+            `);
+        }
+
       }).catch((e) => {
         console.log(e);
-        $(".carousel-inner").html(`
-            <div class="carousel-item active">
+        $carouselInner.html(`
+            <div class="carousel-item h-100 active">
               <a href="#">
                 <div class="_spinner">
                   <div class="spinner-border text-dark" role="status">
@@ -103,14 +116,91 @@
             </div>
             `);
       });
+
+      //get games
+      const $hotGames = $("#hot-games");
+      const $classicGames = $("#classic-games");
+      gamesRef.get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          console.log(data);
+          //place games
+          if (data.tag == "經典") {
+            $classicGames.append(
+              `
+            <a class="_gamecard" href="games_detail.html?game=${doc.id}">
+              <div class="_spinner">
+                  <div class="spinner-border text-dark" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+              </div>
+              <img class="d-none" id="img-games-${doc.id}" alt="">
+              <span>${data.title}</span>
+            </a>
+            `
+            );
+          } else if (data.tag == "熱門") {
+            $hotGames.append(
+              `
+            <a class="_gamecard" href="games_detail.html?game=${doc.id}">
+              <div class="_spinner">
+                  <div class="spinner-border text-dark" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+              </div>
+              <img class="d-none" id="img-games-${doc.id}" alt="">
+              <span>${data.title}</span>
+            </a>
+            `
+            );
+          }
+          var gsReference = storage.ref(data.image);
+          gsReference.getDownloadURL()
+            .then((url) => {
+              // Or inserted into an <img> element
+              $(`#img-games-${doc.id}`).attr("src", url).removeClass("d-none").siblings("._spinner")
+                .addClass(
+                  "d-none");
+            })
+            .catch((error) => {
+              // Handle any errors
+            });
+        });
+      }).catch((e) => {
+        console.log(e);
+        $classicGames.append(
+          `
+            <a class="_gamecard" href="#">
+              <div class="_spinner">
+                  <div class="spinner-border text-dark" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+              </div>
+              <span>Dead.</span>
+            </a>
+            `
+        );
+        $hotGames.append(
+          `
+            <a class="_gamecard" href="#">
+              <div class="_spinner">
+                  <div class="spinner-border text-dark" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+              </div>
+              <span>Dead.</span>
+            </a>
+            `
+        );
+      });
     });
   </script>
 </head>
 
-<body class="d-flex flex-column justify-content-between h-100">
+<body>
   <div class="nav-ahr"></div>
 
-  <main class="container-fluid ">
+  <main class="container-fluid flex-grow-1 ">
     <div class="d-flex flex-wrap">
       <div class="_main">
         <div class="_guide">
@@ -147,51 +237,21 @@
       <div class="_side py-2 py-md-0 ps-md-2">
         <div class="_newgames">
           <span class="_newgames-title">熱門新作</span>
-          <div class="_gamecards">
-            <a class="_gamecard" href="">
-              <img src="hOC 1.png" alt="">
-              <span>王冠之心</span>
-            </a>
-            <a class="_gamecard" href="">
-              <img src="hOC 1.png" alt="">
-              <span>王冠之心</span>
-            </a>
-            <a class="_gamecard" href="">
-              <img src="hOC 1.png" alt="">
-              <span>王冠之心</span>
-            </a>
+          <div class="_gamecards" id="hot-games">
+
           </div>
           <a class="_detail-link" href="games.html">看更多</a>
         </div>
         <div class="_classic ">
           <span class="_classic-title">經典必玩</span>
-          <div class="_gamecards">
-            <a class="_gamecard" href="">
-              <img src="hOC 1.png" alt="">
-              <span>王冠之心</span>
-            </a>
+          <div class="_gamecards" id="classic-games">
           </div>
           <a class="_detail-link" href="games.html">看更多</a>
         </div>
         <div class="_trynow ">
           <span class="_trynow-title">限時試玩</span>
           <div class="_gamecards">
-            <a class="_gamecard" href="">
-              <img src="PotionExplosion 1.png" alt="">
-              <span>巫術學院</span>
-            </a>
-            <a class="_gamecard" href="">
-              <img src="hOC 1.png" alt="">
-              <span>王冠之心</span>
-            </a>
-            <a class="_gamecard" href="">
-              <img src="PotionExplosion 1.png" alt="">
-              <span>巫術學院</span>
-            </a>
-            <a class="_gamecard" href="">
-              <img src="PotionExplosion 1.png" alt="">
-              <span>巫術學院</span>
-            </a>
+
           </div>
         </div>
       </div>

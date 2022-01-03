@@ -15,24 +15,52 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
     </script>
-    <script type="module" src="js/firebase.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
     <script src="js/shared_layout.js"></script>
     <link rel="stylesheet" href="css/news_detail.css">
     <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeOEuEKJ6RIxlYjUyAyImN6dp63zvAE4k",
+            authDomain: "f2e-final-16079.firebaseapp.com",
+            projectId: "f2e-final-16079",
+            storageBucket: "f2e-final-16079.appspot.com",
+            messagingSenderId: "717088954690",
+            appId: "1:717088954690:web:7a3f336707928485cf10db",
+            measurementId: "G-QY4TYEPS8K"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        let db = firebase.firestore();
+        let storage = firebase.storage();
+        let newsRef = db.collection("news-content");
         const params = new URLSearchParams(window.location.search);
         const news = params.get("news");
         // alert((livers.find(e => e.name == liver)).desc);
         $(function () {
-            // let index = livers.findIndex(e => e.name == liver);
-            // $("#liver-img").attr("src", `img/liverdetail/liverdetail_image${index+1}.webp`);
-            // $(".content-box-name").html(liver);
-            // $(".content-box-desc").html(livers[index].desc);
-            // $(".prev>a").attr("href", `liver_detail.html?liver=${livers[index>0?index-1:0].name}`);
-            // $(".next>a").attr("href",
-            //     `liver_detail.html?liver=${livers[index<livers.length-1?index+1:livers.length-1].name}`);
-            // $("#yt-link").attr("href", `${livers[index].yt}`);
-            // $("#tw-link").attr("href", `${livers[index].tw}`);
-            console.log(news);
+            newsRef.doc(`${news}`).get().then((doc) => {
+                const data = doc.data();
+                $("#news-title").html(`${data.title}`);
+                $("#news-desc").html(`${data.description}`);
+
+                //get img
+                var gsReference = storage.ref(data.image);
+                gsReference.getDownloadURL()
+                    .then((url) => {
+                        // Or inserted into an <img> element
+                        $(`#news-img`).attr("src", url).removeClass("d-none")
+                            .siblings("._spinner")
+                            .addClass(
+                                "d-none");
+                    })
+                    .catch((error) => {
+                        // Handle any errors
+                    });
+            }).catch((e) => console.log(e));
         });
     </script>
 </head>
@@ -52,17 +80,26 @@
         <div class="card my-2 pt-2 _card">
             <div class=" row g-0 pb-2">
                 <div class="col-md-8 d-flex justify-content-center">
-                    <img src="kks_box_front_520px.png" class="img-fluid rounded-start" alt="...">
+                    <div class="_spinner">
+                        <div class="spinner-border text-dark" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <img class="img-fluid rounded-start d-none" id="news-img" alt="...">
                 </div>
                 <div class="col-md-4">
                     <div class="card-body">
-                        <h5 class="card-title _card-title">卡卡頌20周年</h5>
-                        <p class="card-text _card-text">卡卡頌20周年限定典藏發售中<br>另附台灣地圖擴充</p>
+                        <h5 class="card-title _card-title" id="news-title">
+                            <div class="spinner-border text-dark" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </h5>
+                        <p class="card-text _card-text" id="news-desc"></p>
                     </div>
                 </div>
             </div>
             <div class="card-footer">
-                <p class="card-text text-center"><small class="text-muted">2021/12/1</small></p>
+                <p class="card-text text-center"><small class="text-muted" id="news-time">2021/12/1</small></p>
             </div>
         </div>
 

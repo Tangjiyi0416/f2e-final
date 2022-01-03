@@ -11,6 +11,7 @@
     width: 100%;
     border-radius: 5px;
     padding: 10px;
+    flex-grow: 1;
 }
 
 @media (min-width:768px) {
@@ -40,6 +41,11 @@
     margin-top: 10px;
 }
 
+.carousel-inner {
+    height: 225px;
+
+}
+
 .carousel-caption {
     left: 0;
     right: 0;
@@ -53,13 +59,6 @@
 
 .carousel-caption h5 {
     font-size: 2rem;
-}
-
-._spinner {
-    min-height: 225px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 ._news img {
@@ -76,8 +75,8 @@
         height: 600px;
     }
 
-    ._spinner {
-        min-height: 600px;
+    .carousel-inner {
+        height: 600px;
     }
 }
 
@@ -107,7 +106,6 @@
 
 ._gamecard {
     height: 170px;
-    width: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -163,6 +161,7 @@
     gap: 10px;
     width: 100%;
     border-radius: 5px;
+    flex-grow: 1;
 }
 
 ._newgames-title {
@@ -184,6 +183,7 @@
     gap: 10px;
     width: 100%;
     border-radius: 5px;
+    flex-grow: 1;
 }
 
 ._classic-title {
@@ -205,6 +205,7 @@
     gap: 10px;
     width: 100%;
     border-radius: 5px;
+    flex-grow: 1;
 }
 
 ._trynow-title {
