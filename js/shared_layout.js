@@ -10,4 +10,16 @@ $(function () {
         console.log("footer loaded.");
         $("footer").unwrap();
     });
+
+    const auth = firebase.auth();
+
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            $("#auth").html("登出").attr("href", "index.html").click(() => {
+                auth.signOut();
+            });
+        } else {
+            console.log("not logined");
+        }
+    });
 });

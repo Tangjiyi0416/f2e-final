@@ -20,6 +20,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
   <script src="js/shared_layout.js"></script>
   <script>
@@ -120,6 +121,7 @@
       //get games
       const $hotGames = $("#hot-games");
       const $classicGames = $("#classic-games");
+      const $tryGames = $("#tryout");
       gamesRef.get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const data = doc.data();
@@ -134,12 +136,13 @@
                     <span class="visually-hidden">Loading...</span>
                   </div>
               </div>
-              <img class="d-none" id="img-games-${doc.id}" alt="">
+              <img class="d-none img-games-${doc.id}" alt="">
               <span>${data.title}</span>
             </a>
             `
             );
-          } else if (data.tag == "熱門") {
+          }
+          if (data.tag == "熱門") {
             $hotGames.append(
               `
             <a class="_gamecard" href="games_detail.html?game=${doc.id}">
@@ -148,7 +151,22 @@
                     <span class="visually-hidden">Loading...</span>
                   </div>
               </div>
-              <img class="d-none" id="img-games-${doc.id}" alt="">
+              <img class="d-none img-games-${doc.id}" alt="">
+              <span>${data.title}</span>
+            </a>
+            `
+            );
+          }
+          if (data.try) {
+            $tryGames.append(
+              `
+            <a class="_gamecard" href="games_detail.html?game=${doc.id}">
+              <div class="_spinner">
+                  <div class="spinner-border text-dark" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+              </div>
+              <img class="d-none img-games-${doc.id}" alt="">
               <span>${data.title}</span>
             </a>
             `
@@ -158,7 +176,7 @@
           gsReference.getDownloadURL()
             .then((url) => {
               // Or inserted into an <img> element
-              $(`#img-games-${doc.id}`).attr("src", url).removeClass("d-none").siblings("._spinner")
+              $(`.img-games-${doc.id}`).attr("src", url).removeClass("d-none").siblings("._spinner")
                 .addClass(
                   "d-none");
             })
@@ -192,6 +210,18 @@
             </a>
             `
         );
+        $tryGames.append(
+          `
+            <a class="_gamecard" href="#">
+              <div class="_spinner">
+                  <div class="spinner-border text-dark" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+              </div>
+              <span>Dead.</span>
+            </a>
+            `
+        );
       });
     });
   </script>
@@ -204,10 +234,9 @@
     <div class="d-flex flex-wrap">
       <div class="_main">
         <div class="_guide">
+          <h2>簡介</h2>
           <span>
-            簡短網站引導
-            <br>
-            昆昆佃大什它國國是日它佃夾旨署累尖伯毋愜晒之毋灼廾國是日它佃夾旨署累尖伯毋愜晒之毋灼廾昆昆佃大什它國國是日它佃夾旨署累尖伯毋愜晒之毋灼廾署累尖伯毋愜晒之毋灼廾昆昆佃大什它國國是日它佃夾旨署累尖伯毋愜晒之毋灼廾昆昆佃大什它國國是日它佃夾旨署累尖伯毋愜晒之毋灼廾
+            桌遊是為了磨滅人與人之間的距離而重新發展的產業，但並不該被物理上的距離所侷限，藉由現在最便捷的網路平台，更能與來自世界各地的gamer相識真正做到拉近人與人之間的距離
           </span>
         </div>
         <div class="_news w-100">
@@ -250,7 +279,7 @@
         </div>
         <div class="_trynow ">
           <span class="_trynow-title">限時試玩</span>
-          <div class="_gamecards">
+          <div class="_gamecards" id="tryout">
 
           </div>
         </div>

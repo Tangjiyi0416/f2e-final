@@ -15,10 +15,58 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
     </script>
-    <script type="module" src="js/firebase.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
     <script src="js/shared_layout.js"></script>
     <link rel="stylesheet" href="css/register.css">
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeOEuEKJ6RIxlYjUyAyImN6dp63zvAE4k",
+            authDomain: "f2e-final-16079.firebaseapp.com",
+            projectId: "f2e-final-16079",
+            storageBucket: "f2e-final-16079.appspot.com",
+            messagingSenderId: "717088954690",
+            appId: "1:717088954690:web:7a3f336707928485cf10db",
+            measurementId: "G-QY4TYEPS8K"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        let auth = firebase.auth();
+        // alert((livers.find(e => e.name == liver)).desc);
+        $(function () {
+            const $name = $("#name");
+            const $email = $("#email");
+            const $password = $("#password");
+            const $passwordCheck = $("#password-check");
+            $password.keyup(CheckPassword);
+            $passwordCheck.keyup(CheckPassword);
+            $("form").submit(function (e) {
+                e.preventDefault();
+                auth.createUserWithEmailAndPassword($email.val(), $password.val())
+                    .then(() => {
+                        auth.currentUser.updateProfile({
+                            displayName: $name.val(),
+                        }).then(() => {
+                            window.location.href = "index.html";
+                        });
+                    }).catch((e) => {
+                        alert(e.message);
+                    });
 
+
+            });
+
+            function CheckPassword() {
+                if ($password.val() != $passwordCheck.val()) {
+                    $passwordCheck[0].setCustomValidity("密碼不相符");
+                } else {
+                    $passwordCheck[0].setCustomValidity("");
+                }
+            }
+        });
+    </script>
 
 </head>
 
@@ -28,26 +76,27 @@
     <main class="container d-flex flex-column align-items-center gap-5 mb-2 _main">
         <div class="my-2"></div>
         <h1 class="mt-5">註冊</h1>
-        <div class="_inputs d-flex flex-column justify-content-between align-items-center gap-3 ">
+        <form class="_inputs d-flex flex-column justify-content-between align-items-center gap-3 ">
             <div class="d-flex flex-column">
                 <label for="name">帳號暱稱</label>
-                <input type="text" name="name" id="name" placeholder="example@mail.com">
+                <input type="text" name="name" id="name" placeholder="XXXXX" required>
             </div>
             <div class="d-flex flex-column">
                 <label for="email">電子郵件</label>
-                <input type="email" name="email" id="email" placeholder="example@mail.com">
+                <input type="email" name="email" id="email" placeholder="example@mail.com" required>
             </div>
             <div class="d-flex flex-column">
-                <label for="password">密碼</label>
-                <input type="password" name="password" id="password" placeholder="password">
+                <label for="password">密碼(至少8個字)</label>
+                <input type="password" name="password" id="password" placeholder="password" pattern="[a-zA-Z0-9]{8,}"
+                    required>
             </div>
             <div class="d-flex flex-column">
                 <label for="password-check">確認密碼</label>
-                <input type="password" name="password-check" id="password-check" placeholder="password">
+                <input type="password" name="password-check" id="password-check" placeholder="password" required>
             </div>
-        </div>
+            <button class="_btn _btn-main" type="submit">註冊</button>
+        </form>
         <div class="_actions d-flex flex-column align-items-center">
-            <a class="_btn" role="button" href="#">註冊</a>
             <span class="mb-2">已經有帳號？</span>
             <a class="_btn" href="login.html">登入</a>
             <span class="_otherway-label mb-3">其他登入方式</span>

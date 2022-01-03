@@ -15,38 +15,218 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
     </script>
-    <script type="module" src="js/firebase.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
     <script src="js/shared_layout.js"></script>
     <link rel="stylesheet" href="css/trynow.css">
 
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeOEuEKJ6RIxlYjUyAyImN6dp63zvAE4k",
+            authDomain: "f2e-final-16079.firebaseapp.com",
+            projectId: "f2e-final-16079",
+            storageBucket: "f2e-final-16079.appspot.com",
+            messagingSenderId: "717088954690",
+            appId: "1:717088954690:web:7a3f336707928485cf10db",
+            measurementId: "G-QY4TYEPS8K"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        let auth = firebase.auth();
+        let db = firebase.firestore();
+        let gameRoomsRef = db.collection("game-rooms");
+        let gameRoomID = null;
+        $(function () {
+            const $gph = $(".game-ph");
+            const $desc = $(".game-desc");
+            const $gp = $(".gameroom-player")
 
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    $gph.addClass("d-none");
+                    $desc.removeClass("d-none");
+                }
+            });
+
+            $("#start-game").click((e) => {
+                if (auth.currentUser) {
+                    //create new game room
+                    gameRoomsRef.add({
+                        owner: auth.currentUser.uid,
+                        players: [auth.currentUser.uid],
+                        targetPlayerNumber: 2
+                    }).then((docRef) => {
+                        gameRoomID = docRef.id;
+                        $(".gameroom-id").html(gameRoomID);
+                        $(".gameroom-id-spinner").addClass("d-none");
+                        $(".gameroom-player").html("1/2");
+
+                        //listen to player join room
+                        let gameRoomDocRef = gameRoomsRef.doc(gameRoomID);
+                        gameRoomDocRef.onSnapshot((doc) => {
+                            let data = doc.data();
+                            $gp.html(`${data.players.length}/2`);
+                            if (data.players.length == data.targetPlayerNumber) {
+                                window.location.href = "tryout_game.html";
+                            }
+                        });
+                    });
+                }
+            });
+            $("#join-conf").click((e) => {
+                if (auth.currentUser) {
+                    gameRoomID = $("join-gameroom-id").val();
+                    console.log(gameRoomID);
+                    const docRef = gameRoomsRef.doc(gameRoomID);
+                    docRef.get().then((doc) => {
+                        //join game room
+                        const data = doc.data();
+                        let players = data.players;
+                        players.push(auth.currentUser.uid);
+                        doc.update({
+                            players: players,
+                        }).then(() => {
+                            $("#join-inputs").addClass("d-none");
+                            $("#join-display").removeClass("d-none");
+                            $("#gameroom-id-display").html(gameRoomID);
+
+                            //listen to player join room
+                            let gameRoomDocRef = gameRoomsRef.doc(gameRoomID);
+                            gameRoomDocRef.onSnapshot((doc) => {
+                                let data = doc.data();
+                                $gp.html(`${data.players.length}/2`);
+                                if (data.players.length == data
+                                    .targetPlayerNumber) {
+                                    window.location.href = "tryout_game.html";
+                                }
+                            });
+                        });
+                    });
+                }
+            });
+
+        });
+    </script>
 </head>
 
 <body>
     <div class="nav-ahr"></div>
 
-    <main>
-        <main class="container-fluid d-flex flex-column justify-content-center align-items-center _trynow">
-            <span class="_news-detail-title my-2">限時試玩</span>
+    <main class="container-fluid d-flex flex-column align-content-center _trynow">
+        <span class="_news-detail-title my-2">限時試玩</span>
 
-            <div class="card pt-2 _card">
-                <div class=" row g-0 pb-2 ">
-                    <div class="col-md-6 d-flex justify-content-center">
-                        <img src="PotionExplosion 1.png" class="img-fluid rounded-start" alt="...">
+        <div class="card pt-2 _card">
+            <div class=" row g-0 pb-2 ">
+                <div class="col-md-4 d-flex justify-content-center">
+                    <img src="GG.jpg" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8 d-flex flex-column">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title _card-title">奇雞連連</h5>
+                        <p class="card-text _card-text">
+                        </p>
                     </div>
-                    <div class="col-md-6 d-flex flex-column">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title _card-title">巫術學院</h5>
-                            <p class="card-text _card-text">
-                                簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介簡介</p>
-                        </div>
-                        <a class="_detail-link" href="#">試玩看看</a>
-                    </div>
+                    <button type="button" class="_detail-link" id="start-game" data-bs-toggle="modal"
+                        data-bs-target="#start-Modal">發起對戰</button>
+                    <button type="button" class="_detail-link" id="join-game" data-bs-toggle="modal"
+                        data-bs-target="#join-Modal">加入對戰</button>
                 </div>
             </div>
-
-        </main>
+        </div>
     </main>
+    <!-- start game -->
+    <div class="modal fade" id="start-Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">發起對戰</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="start-game-body">
+                    <!-- gph -->
+                    <span class="game-ph">
+                        尚未登入，現在<a href="login.html">登入</a>？
+                    </span>
+                    <!-- desc -->
+                    <div class="d-none game-desc">
+                        <div class="d-flex">
+                            <p>
+                                <span>遊戲大廳ID：</span>
+                                <span class="gameroom-id">
+                                </span>
+                            </p>
+                            <div class="spinner-border spinner-border-sm text-dark gameroom-id-spinner" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <span>等待玩家加入：</span>
+                            <span class="gameroom-player">
+                            </span>
+                            <div class="spinner-border spinner-border-sm text-dark gameroom-player-spinner"
+                                role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- join game -->
+    <div class="modal fade" id="join-Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">加入對戰</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="join-game-body">
+                    <!-- gph -->
+                    <span id="game-ph">
+                        尚未登入，現在<a href="login.html">登入</a>？
+                    </span>
+                    <!-- desc -->
+                    <div class="d-none game-desc">
+                        <div class="px-4" id="join-inputs">
+                            <label for="join-gameroom-id">輸入遊戲大廳ID：</label>
+                            <input type="text" name="join-gameroom-id" id="join-gameroom-id"
+                                placeholder="Awa4AWD4842NYmzT1379">
+                        </div>
+                        <div class="d-flex d-none" id="join-display">
+                            <p>
+                                <span>遊戲大廳ID：</span>
+                                <span id="gameroom-id-display">
+                                </span>
+                            </p>
+                            <div class="d-flex">
+                                <span>等待玩家加入：</span>
+                                <span class="gameroom-player">
+                                </span>
+                                <div class="spinner-border spinner-border-sm text-dark gameroom-player-spinner"
+                                    role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="join-conf">加入</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="footer-ahr"></div>
 </body>
 

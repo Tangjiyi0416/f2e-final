@@ -75,6 +75,14 @@ input[type="password"]:focus {
     background: #000;
 }
 
+._btn-main {
+    height: 40px;
+    font-size: 20px;
+    width: 180px;
+    line-height: 20px;
+    background-color: transparent;
+}
+
 ._otherway-label {
     position: relative;
     text-align: center;
