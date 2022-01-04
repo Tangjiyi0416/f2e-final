@@ -41,7 +41,7 @@
         let db = firebase.firestore();
         const params = new URLSearchParams(window.location.search);
         const gameroomID = params.get("gameroomID");
-        let gameroomDocRef = db.collection("game-rooms").doc("gameroomID");
+        let gameroomDocRef = db.collection("game-rooms").doc(gameroomID);
         let $selected = null;
         $(function () {
             $("._pawn-place").click((e) => {
@@ -60,7 +60,14 @@
                     $selected.addClass("_pawn-selected");
                 }
             });
-            $("td").click((e) => {
+            $("td").click(PlacePawn);
+            gameroomDocRef.onSnapshot((doc) => {
+                console.log(doc.data().gametable);
+                $("#game-table").html(doc.data().gametable);
+                $("td").click(PlacePawn);
+            });
+
+            function PlacePawn(e) {
                 //try select
 
                 if (!$selected) {
@@ -82,10 +89,12 @@
                     }
                     var svg = $selected.find("svg").first().clone(false);
                     $(e.currentTarget).append(svg);
+                    const gametable = $("#game-table").html();
+                    gameroomDocRef.update({
+                        gametable: gametable
+                    });
                 }
-            });
-
-            function SelectPawn(e) {}
+            }
         });
     </script>
 </head>
@@ -130,7 +139,7 @@
                 </div>
             </div>
             <div class="_table d-flex justify-content-center align-items-center text-center">
-                <table>
+                <table id="game-table">
                     <tr>
                         <td></td>
                         <td></td>

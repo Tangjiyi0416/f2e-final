@@ -57,6 +57,7 @@ tr {
 
 ._shaking {
     animation: shake 0.5s;
+    animation-iteration-count: 300;
 }
 
 @keyframes shake {
