@@ -66,14 +66,21 @@
                 if (!$selected) {
                     return;
                 }
-                const h1 = $selected.find("h1").first();
-                h1.html(h1.html() - 1);
+
                 //if selected
                 const $target = $(e.currentTarget);
                 const targetSize = $target.find("svg").first().attr("data-size") || 0;
                 console.log(targetSize);
-                if ($($selected).find("svg").first().attr("data-size") > targetSize) {
-                    var svg = $($selected).find("svg").first().clone(false);
+                if ($selected.find("svg").last().attr("data-size") > targetSize) {
+                    const $h1 = $selected.find("h1").first();
+                    let number = $h1.html() - 1;
+                    if (number >= 0) {
+                        $h1.html(number);
+
+                    } else {
+                        return;
+                    }
+                    var svg = $selected.find("svg").first().clone(false);
                     $(e.currentTarget).append(svg);
                 }
             });
