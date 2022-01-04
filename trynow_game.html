@@ -43,6 +43,14 @@
         const gameroomID = params.get("gameroomID");
         let gameroomDocRef = db.collection("game-rooms").doc(gameroomID);
         let $selected = null;
+        let pawncount = {
+            "big-other": 2,
+            "mid-other": 2,
+            "small-other": 2,
+            "big": 2,
+            "mid": 2,
+            "small": 2,
+        };
         $(function () {
             $("._pawn-place").click((e) => {
                 //try select
@@ -61,9 +69,11 @@
                 }
             });
             $("td").click(PlacePawn);
+
             gameroomDocRef.onSnapshot((doc) => {
-                console.log(doc.data().gametable);
                 $("#game-table").html(doc.data().gametable);
+                if (doc.data().pawncount)
+                    pawncount = doc.data().pawncount;
                 $("td").click(PlacePawn);
             });
 
@@ -79,10 +89,11 @@
                 const targetSize = $target.find("svg").last().attr("data-size") || 0;
                 console.log(targetSize);
                 if ($selected.find("svg").first().attr("data-size") > targetSize) {
+
                     const $h1 = $selected.find("h1").first();
-                    let number = $h1.html() - 1;
-                    if (number >= 0) {
-                        $h1.html(number);
+                    if (pawncount[$selected.attr("id")] >= 1) {
+                        pawncount[$selected.attr("id")] -= 1;
+                        $h1.html(pawncount[$selected.attr("id")]);
 
                     } else {
                         return;
@@ -90,8 +101,10 @@
                     var svg = $selected.find("svg").first().clone(false);
                     $(e.currentTarget).append(svg);
                     const gametable = $("#game-table").html();
+
                     gameroomDocRef.update({
-                        gametable: gametable
+                        gametable: gametable,
+                        pawncount: pawncount
                     });
                 }
             }
