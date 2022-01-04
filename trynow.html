@@ -54,10 +54,12 @@
 
             $("#start-game").click((e) => {
                 if (auth.currentUser) {
+                    let players = {};
+                    players[auth.currentUser.uid] = 0;
                     //create new game room
                     gameRoomsRef.add({
                         owner: auth.currentUser.uid,
-                        players: [auth.currentUser.uid],
+                        players: players,
                         targetPlayerNumber: 2
                     }).then((docRef) => {
                         gameRoomID = docRef.id;
@@ -69,9 +71,11 @@
                         let gameRoomDocRef = gameRoomsRef.doc(gameRoomID);
                         gameRoomDocRef.onSnapshot((doc) => {
                             let data = doc.data();
-                            $gp.html(`${data.players.length}/2`);
-                            if (data.players.length == data.targetPlayerNumber) {
-                                window.location.href = "tryout_game.html";
+                            $gp.html(`${Object.keys(data.players).length}/2`);
+                            if (Object.keys(data.players).length >= data
+                                .targetPlayerNumber) {
+                                window.location.href =
+                                    `trynow_game.html?gameroomID=${gameRoomID}`;
                             }
                         });
                     });
@@ -79,15 +83,21 @@
             });
             $("#join-conf").click((e) => {
                 if (auth.currentUser) {
-                    gameRoomID = $("join-gameroom-id").val();
+                    gameRoomID = $("#join-gameroom-id").val();
                     console.log(gameRoomID);
                     const docRef = gameRoomsRef.doc(gameRoomID);
                     docRef.get().then((doc) => {
                         //join game room
                         const data = doc.data();
                         let players = data.players;
-                        players.push(auth.currentUser.uid);
-                        doc.update({
+                        if (!(auth.currentUser.uid in players)) {
+                            players[auth.currentUser.uid] = Object.keys(players).length;
+                        } else {
+                            console.log(auth.currentUser.uid);
+                            alert("你不能用同支帳號進入同一大廳");
+                            return;
+                        }
+                        docRef.update({
                             players: players,
                         }).then(() => {
                             $("#join-inputs").addClass("d-none");
@@ -98,10 +108,13 @@
                             let gameRoomDocRef = gameRoomsRef.doc(gameRoomID);
                             gameRoomDocRef.onSnapshot((doc) => {
                                 let data = doc.data();
-                                $gp.html(`${data.players.length}/2`);
-                                if (data.players.length == data
+                                $gp.html(
+                                    `${Object.keys(data.players).length}/2`
+                                );
+                                if (Object.keys(data.players).length >= data
                                     .targetPlayerNumber) {
-                                    window.location.href = "tryout_game.html";
+                                    window.location.href =
+                                        `trynow_game.html?gameroomID=${gameRoomID}`;
                                 }
                             });
                         });
@@ -128,6 +141,8 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title _card-title">奇雞連連</h5>
                         <p class="card-text _card-text">
+                            間單的遊戲，帶來簡單的享受，那麼當簡單的遊戲不再簡單時，又會帶來甚麼樣不同的感受呢？
+                            這款奇雞連連正是如此，簡單中的複雜，正如同荒野中突然誕生出的一株小草給這片荒蕪增添了一抹全新的生機
                         </p>
                     </div>
                     <button type="button" class="_detail-link" id="start-game" data-bs-toggle="modal"
@@ -192,7 +207,7 @@
                 </div>
                 <div class="modal-body" id="join-game-body">
                     <!-- gph -->
-                    <span id="game-ph">
+                    <span class="game-ph">
                         尚未登入，現在<a href="login.html">登入</a>？
                     </span>
                     <!-- desc -->

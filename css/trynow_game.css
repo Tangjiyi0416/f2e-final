@@ -1,0 +1,57 @@
+._bg {
+    background: #FFFDF6;
+    padding-bottom: 10px;
+}
+
+._game {
+    padding: 50px;
+}
+
+table {
+    width: 320px;
+    height: 320px;
+}
+
+td {
+    width: 33%;
+    border: 1px solid black;
+}
+
+tr {
+    height: 33%;
+    border: 1px solid black;
+}
+
+._player,
+._player-other {
+    width: 320px;
+}
+
+._pawn-place {
+    padding: 20px 0;
+    background-color: #EFE7C9;
+    width: 33%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0 0 30% 30%;
+    transform-origin: top;
+}
+
+._pawn-place:hover {
+    background-color: black;
+    color: wheat;
+}
+
+._pawn-other {
+    border-radius: 30% 30% 0 0;
+    flex-direction: column-reverse;
+    transform-origin: bottom;
+}
+
+._pawn-selected {
+    transform: scaleY(110%);
+}
+
+/* #endregion drag */
