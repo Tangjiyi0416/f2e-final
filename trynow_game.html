@@ -69,9 +69,9 @@
 
                 //if selected
                 const $target = $(e.currentTarget);
-                const targetSize = $target.find("svg").first().attr("data-size") || 0;
+                const targetSize = $target.find("svg").last().attr("data-size") || 0;
                 console.log(targetSize);
-                if ($selected.find("svg").last().attr("data-size") > targetSize) {
+                if ($selected.find("svg").first().attr("data-size") > targetSize) {
                     const $h1 = $selected.find("h1").first();
                     let number = $h1.html() - 1;
                     if (number >= 0) {
