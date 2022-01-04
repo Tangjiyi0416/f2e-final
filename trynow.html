@@ -49,6 +49,7 @@
                 if (user) {
                     $gph.addClass("d-none");
                     $desc.removeClass("d-none");
+                    $("#join-conf").removeClass("d-none");
                 }
             });
 
@@ -236,7 +237,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="join-conf">加入</button>
+                    <button type="button" class="btn btn-primary d-none" id="join-conf">加入</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">取消</button>
                 </div>
             </div>

@@ -42,36 +42,38 @@
         const params = new URLSearchParams(window.location.search);
         const gameroomID = params.get("gameroomID");
         let gameroomDocRef = db.collection("game-rooms").doc("gameroomID");
-        let selected = null;
+        let $selected = null;
         $(function () {
             $("._pawn-place").click((e) => {
                 //try select
-
-                if (!selected) {
-                    selected = $(e.currentTarget);
-                    $(selected).addClass("_pawn-selected");
-                } else if (e.currentTarget == selected) {
-                    $(selected).removeClass("_pawn-selected");
-                    selected = null;
-                } else if ($(selected).hasClass("_pawn-place")) {
-                    selected = $(e.currentTarget);
-                    $("._pawn-selected").removeClass("_pawn-selected");
-                    $(selected).addClass("_pawn-selected");
+                let $target = $(e.currentTarget);
+                console.log($target);
+                if (!$selected) {
+                    $selected = $target;
+                    $selected.addClass("_pawn-selected");
+                } else if ($target.attr("id") == $selected.attr("id")) {
+                    $selected.removeClass("_pawn-selected");
+                    $selected = null;
+                } else if ($selected.hasClass("_pawn-place")) {
+                    $("._pawn-place").removeClass("_pawn-selected");
+                    $selected = $target;
+                    $selected.addClass("_pawn-selected");
                 }
             });
             $("td").click((e) => {
                 //try select
 
-                if (!selected) {
-
+                if (!$selected) {
+                    return;
                 }
+                const h1 = $selected.find("h1").first();
+                h1.html(h1.html() - 1);
                 //if selected
-
                 const $target = $(e.currentTarget);
                 const targetSize = $target.find("svg").first().attr("data-size") || 0;
                 console.log(targetSize);
-                if ($(selected).find("svg").first().attr("data-size") > targetSize) {
-                    var svg = $(selected).find("svg").first().clone(false);
+                if ($($selected).find("svg").first().attr("data-size") > targetSize) {
+                    var svg = $($selected).find("svg").first().clone(false);
                     $(e.currentTarget).append(svg);
                 }
             });

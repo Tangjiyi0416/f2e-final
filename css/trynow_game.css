@@ -37,6 +37,7 @@ tr {
     justify-content: space-between;
     border-radius: 0 0 30% 30%;
     transform-origin: top;
+    transition: all 150ms ease-out;
 }
 
 ._pawn-place:hover {
